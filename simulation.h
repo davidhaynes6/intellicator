@@ -3,20 +3,20 @@
 #include <QObject>
 #include <vector>
 #include <random>
-#include "stockmontecarlosimulator.h"
+#include "simulator.h"
 
-class simulation : public QObject {
+class Simulation : public QObject {
     Q_OBJECT
 
 public:
-    explicit simulation(QObject* parent=nullptr, int numSimulations=10000);
+    explicit Simulation(QObject* parent=nullptr, int numSimulations=10000);
 
 signals:
     void progressUpdated(int value);
     void finished(double value);
 
 public slots:
-    void doWork(stockmontecarlosimulator* s);
+    void doWork(Simulator* s);
 
 private:   
     int numSimulations;

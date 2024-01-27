@@ -3,15 +3,15 @@
 #include <QtWidgets/QMainWindow>
 #include "ui_intellicator.h"
 #include "simulation.h"
-#include "stockmontecarlosimulator.h"
+#include "simulator.h"
 
-class intellicator : public QMainWindow
+class Intellicator : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    intellicator(QWidget *parent = nullptr);
-    ~intellicator();
+    Intellicator(QWidget *parent = nullptr);
+    ~Intellicator();
 
     void initializeThread();
 
@@ -29,12 +29,12 @@ private:
     double volatility = 0.2;
     double timeHorizon = 1;
     int numSimulations = 10000;
-    stockmontecarlosimulator* s;
+    Simulator* simulator;
 
     Ui::intellicatorClass ui;
 
     QProgressBar* progressBar;
     QPushButton* startButton;
-    simulation* sim;
+    Simulation* sim;
     QThread* simThread;
 };

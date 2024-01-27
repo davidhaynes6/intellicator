@@ -2,12 +2,12 @@
 #include <QThread>
 #include <cmath>
 
-simulation::simulation(QObject* parent, int numSimulations)
+Simulation::Simulation(QObject* parent, int numSimulations)
     : QObject(parent), numSimulations(numSimulations) 
 {
 }
 
-void simulation::doWork(stockmontecarlosimulator* s) {
+void Simulation::doWork(Simulator* s) {
 
     double averagePercentage = 0.0;
     std::mt19937 generator(std::random_device{}());

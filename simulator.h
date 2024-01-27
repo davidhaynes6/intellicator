@@ -3,9 +3,10 @@
 #include <vector>
 #include <random>
 
-class stockmontecarlosimulator {
+class Simulator {
 public:
-    stockmontecarlosimulator(double S0=0.0, double mu=0.0, double sigma=0.0, double timeHorizon=0.0, int numSimulations=0);
+    static int constexpr ONE_YEAR_TRADING_DAYS = 252;
+    Simulator(double S0=0.0, double mu=0.0, double sigma=0.0, double timeHorizon=0.0, int numSimulations=0);
     double simulateStockPrice(double S0, double mu, double sigma, double timeHorizon, std::mt19937& generator) const;
 
     double getS0() { return S0; }

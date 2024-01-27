@@ -4,15 +4,15 @@
 #include <sstream>
 #include <ctime>
 
-intellicator::intellicator(QWidget* parent) : QMainWindow(parent)
+Intellicator::Intellicator(QWidget* parent) : QMainWindow(parent)
 {
     sim = nullptr;
-    s = nullptr;
+    simulator = nullptr;
     simThread = nullptr;
 
     ui.setupUi(this);
     ui.progressBar->setValue(0);
-    connect(ui.buttonExecute, &QPushButton::clicked, this, &intellicator::onButtonClicked);
+    connect(ui.buttonExecute, &QPushButton::clicked, this, &Intellicator::onButtonClicked);
 
     initialPrice = 100.0;
     expectedReturn = 0.05;
@@ -28,27 +28,27 @@ intellicator::intellicator(QWidget* parent) : QMainWindow(parent)
     ui.progressBar->setRange(0, 100);
 }
 
-intellicator::~intellicator()
+Intellicator::~Intellicator()
 {
 }
 
-void intellicator::initializeThread() {
+void Intellicator::initializeThread() {
 
-    if (sim == nullptr && s == nullptr && simThread == nullptr) {
-        sim = new simulation(this, numSimulations);
-        s = new stockmontecarlosimulator();
+    if (sim == nullptr && simulator == nullptr && simThread == nullptr) {
+        sim = new Simulation(this, numSimulations);
+        simulator = new Simulator();
         simThread = new QThread(this);
         sim->moveToThread(simThread);
-        connect(simThread, &QThread::started, this, &intellicator::startSimulation);
-        connect(sim, &simulation::finished, this, &intellicator::finishedTask);
-        connect(sim, &simulation::progressUpdated, this, &intellicator::updateProgress);
-        connect(sim, &simulation::finished, simThread, &QThread::quit);
-        connect(sim, &simulation::finished, sim, &simulation::deleteLater);
+        connect(simThread, &QThread::started, this, &Intellicator::startSimulation);
+        connect(sim, &Simulation::finished, this, &Intellicator::finishedTask);
+        connect(sim, &Simulation::progressUpdated, this, &Intellicator::updateProgress);
+        connect(sim, &Simulation::finished, simThread, &QThread::quit);
+        connect(sim, &Simulation::finished, sim, &Simulation::deleteLater);
         connect(simThread, &QThread::finished, simThread, &QThread::deleteLater);
     } 
 }
 
-void intellicator::onButtonClicked()
+void Intellicator::onButtonClicked()
 {
     ui.progressBar->setValue(0);
     ui.buttonExecute->setDisabled(true);
@@ -63,25 +63,25 @@ void intellicator::onButtonClicked()
     startTask();
 }
 
-void intellicator::startTask()
+void Intellicator::startTask()
 {
     initializeThread();
     simThread->start();
 }
 
-void intellicator::startSimulation()
+void Intellicator::startSimulation()
 {
     // Pass the updated values to the simulation object.
-    s->setParameters(initialPrice, expectedReturn, volatility, timeHorizon, numSimulations);
-    sim->doWork(s);
+    simulator->setParameters(initialPrice, expectedReturn, volatility, timeHorizon, numSimulations);
+    sim->doWork(simulator);
 }
 
-void intellicator::updateProgress(int value)
+void Intellicator::updateProgress(int value)
 {
     ui.progressBar->setValue(value);
 }
 
-void intellicator::finishedTask(int value)
+void Intellicator::finishedTask(int value)
 {
     // Get the current time
     std::time_t currentTime = std::time(nullptr);
@@ -95,7 +95,7 @@ void intellicator::finishedTask(int value)
     // Format the date and time as "YYYY-MM-DD HH:MM:SS"
     std::strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", localTime);
 
-        // Stream result for display, add Time + Average Price + Years selected
+    // Stream result for display, add Time + Average Price + Years selected
     std::ostringstream result;
     result << buffer << " -- Avg Price: $" << value << std::endl 
         << " S0: " << initialPrice << " mu: " << expectedReturn 
@@ -117,8 +117,8 @@ void intellicator::finishedTask(int value)
     delete simThread;
     simThread = nullptr;
 
-    delete s;
-    s = nullptr;
+    delete simulator;
+    simulator = nullptr;
 
     ui.buttonExecute->setDisabled(false);
 }

@@ -46,10 +46,10 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="stockmontecarlosimulator.h">
+    <ClCompile Include="simulator.h">
       <Filter>Header Files</Filter>
     </ClCompile>
-    <ClCompile Include="stockmontecarlosimulator.cpp">
+    <ClCompile Include="simulator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="simulation.cpp">

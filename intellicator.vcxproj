@@ -91,8 +91,8 @@
   <ItemGroup>
     <QtMoc Include="simulation.h" />
     <ClCompile Include="simulation.cpp" />
-    <ClCompile Include="stockmontecarlosimulator.cpp" />
-    <ClCompile Include="stockmontecarlosimulator.h" />
+    <ClCompile Include="simulator.cpp" />
+    <ClCompile Include="simulator.h" />
     <QtRcc Include="intellicator.qrc" />
     <QtUic Include="intellicator.ui" />
     <QtMoc Include="intellicator.h" />
