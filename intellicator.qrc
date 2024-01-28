@@ -1,4 +1,5 @@
 <RCC>
-    <qresource prefix="intellicator">
+    <qresource prefix="/intellicator">
+        <file>intellicator.ico</file>
     </qresource>
 </RCC>

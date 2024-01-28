@@ -9,7 +9,7 @@ double Simulator::simulateStockPrice(double S0, double mu, double sigma, double 
     std::normal_distribution<double> distribution(0, 1);
     double price = S0;
 
-    for (double t = 0; t < timeHorizon; t += 1.0 / ONE_YEAR_TRADING_DAYS) {
+    for (double time = 0; time < timeHorizon; time += 1.0 / ONE_YEAR_TRADING_DAYS) {
         price += mu * price * (1.0 / ONE_YEAR_TRADING_DAYS) + sigma * price * sqrt(1.0 / ONE_YEAR_TRADING_DAYS) * distribution(generator);
     }
 

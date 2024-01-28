@@ -21,6 +21,7 @@ public slots:
     void startSimulation();
     void updateProgress(int value);
     void finishedTask(int value);
+    void createChart(const std::vector<Point>& data);
 
 private:
 

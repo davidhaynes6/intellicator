@@ -1,6 +1,6 @@
 #include "intellicator.h"
-#include "simulation.h"
 #include <QThread>
+#include <QtCharts>
 #include <sstream>
 #include <ctime>
 
@@ -45,6 +45,7 @@ void Intellicator::initializeThread() {
         connect(sim, &Simulation::finished, simThread, &QThread::quit);
         connect(sim, &Simulation::finished, sim, &Simulation::deleteLater);
         connect(simThread, &QThread::finished, simThread, &QThread::deleteLater);
+        connect(sim, &Simulation::priceDataReady, this, &Intellicator::createChart);
     } 
 }
 
@@ -122,3 +123,30 @@ void Intellicator::finishedTask(int value)
 
     ui.buttonExecute->setDisabled(false);
 }
+
+void Intellicator::createChart(const std::vector<Point>& data) {
+    QLineSeries* series = new QLineSeries();
+
+    for (const Point& point : data) {
+        series->append(static_cast<qreal>(point.simulation), static_cast<qreal>(point.price));
+    }
+
+    QChart* chart = new QChart();
+    chart->addSeries(series);
+    chart->createDefaultAxes();
+    chart->axisX()->setTitleText("Simulation Number");
+    chart->axisY()->setTitleText("Simulated Price ($)");
+
+    QChartView* chartView = new QChartView(chart);
+    chartView->setRenderHint(QPainter::Antialiasing);
+
+    // Set the chart view size to fill the container
+    chartView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    chartView->resize(ui.chartContainer->size());
+
+    // Set chartView as a child of chartContainer
+    QVBoxLayout* layout = new QVBoxLayout(ui.chartContainer);
+    layout->addWidget(chartView);
+    ui.chartContainer->setLayout(layout);
+}
+
