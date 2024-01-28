@@ -82,7 +82,7 @@ void Intellicator::updateProgress(int value)
     ui.progressBar->setValue(value);
 }
 
-void Intellicator::finishedTask(int value)
+void Intellicator::finishedTask(double value)
 {
     // Get the current time
     std::time_t currentTime = std::time(nullptr);
@@ -125,28 +125,42 @@ void Intellicator::finishedTask(int value)
 }
 
 void Intellicator::createChart(const std::vector<Point>& data) {
+    // Check if a QChartView already exists in the container
+    QChartView* chartView = nullptr;
+    if (ui.chartContainer->layout() && ui.chartContainer->layout()->count() > 0) {
+        chartView = dynamic_cast<QChartView*>(ui.chartContainer->layout()->itemAt(0)->widget());
+    }
+
+    // If QChartView doesn't exist, create and set it up
+    if (!chartView) {
+        chartView = new QChartView();
+        chartView->setRenderHint(QPainter::Antialiasing);
+        chartView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+        QVBoxLayout* layout = new QVBoxLayout();
+        layout->addWidget(chartView);
+        ui.chartContainer->setLayout(layout);
+    }
+
+    // Clear the existing chart data
+    QChart* chart = chartView->chart();
+    chart->removeAllSeries();
+    chart->removeAxis(chart->axisX());
+    chart->removeAxis(chart->axisY());
+    chart->createDefaultAxes();
+
+    // Create new series with the new data
     QLineSeries* series = new QLineSeries();
+    series->setName("Simulations");
 
     for (const Point& point : data) {
         series->append(static_cast<qreal>(point.simulation), static_cast<qreal>(point.price));
     }
 
-    QChart* chart = new QChart();
+    // Add the new series to the chart
     chart->addSeries(series);
     chart->createDefaultAxes();
     chart->axisX()->setTitleText("Simulation Number");
     chart->axisY()->setTitleText("Simulated Price ($)");
-
-    QChartView* chartView = new QChartView(chart);
-    chartView->setRenderHint(QPainter::Antialiasing);
-
-    // Set the chart view size to fill the container
-    chartView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    chartView->resize(ui.chartContainer->size());
-
-    // Set chartView as a child of chartContainer
-    QVBoxLayout* layout = new QVBoxLayout(ui.chartContainer);
-    layout->addWidget(chartView);
-    ui.chartContainer->setLayout(layout);
 }
 
