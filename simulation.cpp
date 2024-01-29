@@ -25,12 +25,9 @@ void Simulation::doWork(Simulator* simulator) {
         emit progressUpdated(progressPercentage);
         averagePercentage += simulatedPrice;
     }
-    
+
     averagePercentage = averagePercentage / simulator->getNumSimulations();
 
     emit priceDataReady(priceData);   // Emit the price data - used in chartView
     emit finished(averagePercentage); // Emit finished - will delete simulation and simulator
 }
-
-
-

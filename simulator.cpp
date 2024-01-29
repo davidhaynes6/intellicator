@@ -2,7 +2,8 @@
 #include <cmath>
 
 Simulator::Simulator(double initialPrice, double expectedReturn, double volatility, double timeHorizon, int numSimulations) 
-:S0(initialPrice), mu(expectedReturn), sigma(volatility), timeHorizon(timeHorizon), numSimulations(numSimulations) {
+    :S0(initialPrice), mu(expectedReturn), sigma(volatility), timeHorizon(timeHorizon), numSimulations(numSimulations)
+{
 }
 
 double Simulator::simulateStockPrice(double S0, double mu, double sigma, double timeHorizon, std::mt19937& generator) const {

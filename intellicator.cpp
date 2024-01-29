@@ -33,13 +33,13 @@ void Intellicator::initializeThread() {
         simThread = new QThread(this);
         sim->moveToThread(simThread);
         connect(simThread, &QThread::started, this, &Intellicator::startSimulation);
+        connect(simThread, &QThread::finished, simThread, &QThread::deleteLater);
         connect(sim, &Simulation::finished, this, &Intellicator::finishedTask);
         connect(sim, &Simulation::progressUpdated, this, &Intellicator::updateProgress);
         connect(sim, &Simulation::finished, simThread, &QThread::quit);
         connect(sim, &Simulation::finished, sim, &Simulation::deleteLater);
-        connect(simThread, &QThread::finished, simThread, &QThread::deleteLater);
         connect(sim, &Simulation::priceDataReady, this, &Intellicator::createChart);
-    } 
+    }
 }
 
 void Intellicator::onButtonClicked()
@@ -53,7 +53,7 @@ void Intellicator::onButtonClicked()
     volatility = ui.editVolatility->text().toDouble();
     timeHorizon = ui.editTimeHorizon->text().toDouble();
     numSimulations = ui.editNumSimulations->text().toInt();
-    
+
     startTask();
 }
 
@@ -156,4 +156,3 @@ void Intellicator::createChart(const std::vector<Point>& data) {
     chart->axisX()->setTitleText("Simulation Number");
     chart->axisY()->setTitleText("Simulated Price ($)");
 }
-

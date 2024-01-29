@@ -25,6 +25,6 @@ signals:
 public slots:
     void doWork(Simulator* s);
 
-private:   
+private:
     int numSimulations;
 };

@@ -15,7 +15,7 @@ public:
 
     void initializeThread();
 
-public slots:   
+public slots:
     void onButtonClicked();
     void startTask();
     void startSimulation();

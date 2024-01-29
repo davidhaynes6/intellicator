@@ -14,7 +14,7 @@ public:
     double getSimga() { return sigma; }
     double getTimeHorizon() { return timeHorizon; }
     int getNumSimulations() { return numSimulations; }
-    
+
     // Add member functions for setting parameters and performing simulations.
     void setParameters(double initialPrice, double expectedReturn, double volatility, double timeHorizon, int numSimulations);
 
@@ -27,5 +27,3 @@ private:
 
     std::vector<double> finalPrices;
 };
-
-
