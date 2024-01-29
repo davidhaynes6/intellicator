@@ -4,28 +4,21 @@
 #include <sstream>
 #include <ctime>
 
-Intellicator::Intellicator(QWidget* parent) : QMainWindow(parent)
+Intellicator::Intellicator(QWidget* parent) : QMainWindow(parent), initialPrice(100.0F), expectedReturn(0.05F), volatility(0.2F), timeHorizon(1.0F), numSimulations(10000)
 {
     sim = nullptr;
     simulator = nullptr;
     simThread = nullptr;
 
     ui.setupUi(this);
-    ui.progressBar->setValue(0);
-    connect(ui.buttonExecute, &QPushButton::clicked, this, &Intellicator::onButtonClicked);
-
-    initialPrice = 100.0;
-    expectedReturn = 0.05;
-    volatility = 0.2;
-    timeHorizon = 1.0;
-    numSimulations = 10000;
-
     ui.editInitialPrice->setText(QString::number(initialPrice));
     ui.editExpectedReturn->setText(QString::number(expectedReturn));
     ui.editVolatility->setText(QString::number(volatility));
     ui.editTimeHorizon->setText(QString::number(timeHorizon));
     ui.editNumSimulations->setText(QString::number(numSimulations));
     ui.progressBar->setRange(0, 100);
+    ui.progressBar->setValue(0);
+    connect(ui.buttonExecute, &QPushButton::clicked, this, &Intellicator::onButtonClicked);
 }
 
 Intellicator::~Intellicator()
@@ -54,7 +47,7 @@ void Intellicator::onButtonClicked()
     ui.progressBar->setValue(0);
     ui.buttonExecute->setDisabled(true);
 
-    // Retrieve user input and update member variables.
+    // Retrieve user input and update member variables
     initialPrice = ui.editInitialPrice->text().toDouble();
     expectedReturn = ui.editExpectedReturn->text().toDouble();
     volatility = ui.editVolatility->text().toDouble();
@@ -72,7 +65,7 @@ void Intellicator::startTask()
 
 void Intellicator::startSimulation()
 {
-    // Pass the updated values to the simulation object.
+    // Pass the updated values to the simulation object
     simulator->setParameters(initialPrice, expectedReturn, volatility, timeHorizon, numSimulations);
     sim->doWork(simulator);
 }
@@ -90,15 +83,15 @@ void Intellicator::finishedTask(double value)
     // Convert the time to a tm structure for extracting date and time components
     std::tm* localTime = std::localtime(&currentTime);
 
-    // Define a buffer for the formatted date and time
-    char buffer[80];
+    // Define a stringstream for the formatted date and time
+    std::stringstream ss;
 
     // Format the date and time as "YYYY-MM-DD HH:MM:SS"
-    std::strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", localTime);
+    ss << std::put_time(localTime, "%Y-%m-%d %H:%M:%S");
 
     // Stream result for display, add Time + Average Price + Years selected
     std::ostringstream result;
-    result << buffer << " -- Avg Price: $" << value << std::endl 
+    result << ss.str() << " -- Avg Price: $" << value << std::endl 
         << " S0: " << initialPrice << " mu: " << expectedReturn 
         << " sigma: " << volatility << " years: " << timeHorizon 
         << " sims: " << numSimulations << std::endl;
@@ -109,7 +102,7 @@ void Intellicator::finishedTask(double value)
     delete sim;
     sim = nullptr;
 
-    // Stop the previous simulation and wait for it to finish.
+    // Stop the previous simulation and wait for it to finish
     if (simThread->isRunning()) {
         simThread->quit();
         simThread->wait();

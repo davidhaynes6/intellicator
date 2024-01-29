@@ -30,7 +30,6 @@ void Simulation::doWork(Simulator* simulator) {
 
     emit priceDataReady(priceData);   // Emit the price data - used in chartView
     emit finished(averagePercentage); // Emit finished - will delete simulation and simulator
-
 }
 
 
