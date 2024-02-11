@@ -25,11 +25,11 @@ public slots:
 
 private:
 
-    double initialPrice = 100;
-    double expectedReturn = 0.05;
-    double volatility = 0.2;
-    double timeHorizon = 1;
-    int numSimulations = 10000;
+    double initialPrice;
+    double expectedReturn;
+    double volatility;
+    double timeHorizon;
+    int numSimulations;
     Simulator* simulator;
 
     Ui::intellicatorClass ui;

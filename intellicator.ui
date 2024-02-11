@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>789</height>
+    <height>689</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -62,6 +62,13 @@
     </item>
     <item row="1" column="0">
      <layout class="QFormLayout" name="formLayoutParameters">
+      <item row="0" column="0">
+       <widget class="QLabel" name="labelS0">
+        <property name="text">
+         <string>(S0) Initial Stock Price:</string>
+        </property>
+       </widget>
+      </item>
       <item row="0" column="1">
        <widget class="QLineEdit" name="editInitialPrice">
         <property name="sizePolicy">
@@ -79,16 +86,19 @@
         <property name="inputMethodHints">
          <set>Qt::ImhDigitsOnly</set>
         </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="labelMu">
-        <property name="text">
-         <string>(mu) Expected Return (0.05):</string>
+        <property name="inputMask">
+         <string/>
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
+      <item row="2" column="0">
+       <widget class="QLabel" name="labelMu">
+        <property name="text">
+         <string>(mu) Expected Return:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
        <widget class="QLineEdit" name="editExpectedReturn">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -96,16 +106,19 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="labelSigma">
-        <property name="text">
-         <string>(sigma) Volatitlity (0.2):</string>
+        <property name="inputMask">
+         <string/>
         </property>
        </widget>
       </item>
-      <item row="2" column="1">
+      <item row="4" column="0">
+       <widget class="QLabel" name="labelSigma">
+        <property name="text">
+         <string>(sigma) Volatitlity:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
        <widget class="QLineEdit" name="editVolatility">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -115,14 +128,14 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="0">
+      <item row="6" column="0">
        <widget class="QLabel" name="labelTime">
         <property name="text">
          <string>(T) Time Horizon (in years):</string>
         </property>
        </widget>
       </item>
-      <item row="3" column="1">
+      <item row="6" column="1">
        <widget class="QLineEdit" name="editTimeHorizon">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -132,14 +145,14 @@
         </property>
        </widget>
       </item>
-      <item row="4" column="0">
+      <item row="8" column="0">
        <widget class="QLabel" name="labelSimulations">
         <property name="text">
          <string>(N) Number of Simulations:</string>
         </property>
        </widget>
       </item>
-      <item row="4" column="1">
+      <item row="8" column="1">
        <widget class="QLineEdit" name="editNumSimulations">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -149,14 +162,14 @@
         </property>
        </widget>
       </item>
-      <item row="5" column="0">
+      <item row="9" column="0">
        <widget class="QPushButton" name="buttonExecute">
         <property name="text">
          <string>Execute</string>
         </property>
        </widget>
       </item>
-      <item row="6" column="0">
+      <item row="10" column="0">
        <widget class="QLabel" name="labelSim">
         <property name="text">
          <string>Running Simulations:</string>
@@ -166,14 +179,14 @@
         </property>
        </widget>
       </item>
-      <item row="6" column="1">
+      <item row="10" column="1">
        <widget class="QProgressBar" name="progressBar">
         <property name="value">
          <number>24</number>
         </property>
        </widget>
       </item>
-      <item row="7" column="1">
+      <item row="11" column="1">
        <spacer name="verticalSpacer">
         <property name="orientation">
          <enum>Qt::Vertical</enum>
@@ -185,13 +198,6 @@
          </size>
         </property>
        </spacer>
-      </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="labelS0">
-        <property name="text">
-         <string>(S0) Initial Stock Price ($100):</string>
-        </property>
-       </widget>
       </item>
      </layout>
     </item>
@@ -229,25 +235,6 @@
      </layout>
     </item>
    </layout>
-  </widget>
-  <widget class="QMenuBar" name="menuBar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>800</width>
-     <height>22</height>
-    </rect>
-   </property>
-   <widget class="QMenu" name="menuFile">
-    <property name="title">
-     <string>File</string>
-    </property>
-    <addaction name="actionNew"/>
-    <addaction name="actionOpen"/>
-    <addaction name="actionExit"/>
-   </widget>
-   <addaction name="menuFile"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionNew">

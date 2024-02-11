@@ -9,8 +9,8 @@ Simulation::Simulation(QObject* parent, int numSimulations)
 {
 }
 
-void Simulation::doWork(Simulator* simulator) {
-
+void Simulation::doWork(Simulator* simulator)
+{
     std::vector<Point> priceData;
     auto averagePercentage = 0.0;
     std::mt19937 generator(std::random_device{}());

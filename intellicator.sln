@@ -5,8 +5,6 @@ VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "intellicator", "intellicator.vcxproj", "{4379D822-735A-4DA6-989E-5EF92152A311}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test", "test\test.vcxproj", "{6F5C6F24-2F35-44C2-A0FB-CC289664376D}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -23,14 +21,6 @@ Global
 		{4379D822-735A-4DA6-989E-5EF92152A311}.Release|x64.Build.0 = Release|x64
 		{4379D822-735A-4DA6-989E-5EF92152A311}.Release|x86.ActiveCfg = Release|x64
 		{4379D822-735A-4DA6-989E-5EF92152A311}.Release|x86.Build.0 = Release|x64
-		{6F5C6F24-2F35-44C2-A0FB-CC289664376D}.Debug|x64.ActiveCfg = Debug|x64
-		{6F5C6F24-2F35-44C2-A0FB-CC289664376D}.Debug|x64.Build.0 = Debug|x64
-		{6F5C6F24-2F35-44C2-A0FB-CC289664376D}.Debug|x86.ActiveCfg = Debug|Win32
-		{6F5C6F24-2F35-44C2-A0FB-CC289664376D}.Debug|x86.Build.0 = Debug|Win32
-		{6F5C6F24-2F35-44C2-A0FB-CC289664376D}.Release|x64.ActiveCfg = Release|x64
-		{6F5C6F24-2F35-44C2-A0FB-CC289664376D}.Release|x64.Build.0 = Release|x64
-		{6F5C6F24-2F35-44C2-A0FB-CC289664376D}.Release|x86.ActiveCfg = Release|Win32
-		{6F5C6F24-2F35-44C2-A0FB-CC289664376D}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

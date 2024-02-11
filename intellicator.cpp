@@ -4,7 +4,7 @@
 #include <sstream>
 #include <ctime>
 
-Intellicator::Intellicator(QWidget* parent) : QMainWindow(parent), initialPrice(100.0F), expectedReturn(0.05F), volatility(0.2F), timeHorizon(1.0F), numSimulations(10000)
+Intellicator::Intellicator(QWidget* parent) : QMainWindow(parent), initialPrice(100.0F), expectedReturn(0.1025), volatility(0.2F), timeHorizon(1.0F), numSimulations(10000)
 {
     sim = nullptr;
     simulator = nullptr;
@@ -12,8 +12,12 @@ Intellicator::Intellicator(QWidget* parent) : QMainWindow(parent), initialPrice(
 
     ui.setupUi(this);
     ui.editInitialPrice->setText(QString::number(initialPrice));
-    ui.editExpectedReturn->setText(QString::number(expectedReturn));
-    ui.editVolatility->setText(QString::number(volatility));
+    ui.editInitialPrice->setInputMask("$999");
+    QString expectedReturnStr = QString::number(expectedReturn * 100.0, 'f', 2);
+    ui.editExpectedReturn->setText(expectedReturnStr);
+    ui.editExpectedReturn->setInputMask("99.99\\%");
+    ui.editVolatility->setText(QString::number(volatility * 100.0));
+    ui.editVolatility->setInputMask("99\\%");
     ui.editTimeHorizon->setText(QString::number(timeHorizon));
     ui.editNumSimulations->setText(QString::number(numSimulations));
     ui.progressBar->setRange(0, 100);
@@ -32,12 +36,13 @@ void Intellicator::initializeThread() {
         simulator = new Simulator();
         simThread = new QThread(this);
         sim->moveToThread(simThread);
+
         connect(simThread, &QThread::started, this, &Intellicator::startSimulation);
-        connect(simThread, &QThread::finished, simThread, &QThread::deleteLater);
+        connect(simThread, &QThread::finished, simThread, &QThread::deleteLater);       // schedule object for deletion
         connect(sim, &Simulation::finished, this, &Intellicator::finishedTask);
-        connect(sim, &Simulation::progressUpdated, this, &Intellicator::updateProgress);
         connect(sim, &Simulation::finished, simThread, &QThread::quit);
-        connect(sim, &Simulation::finished, sim, &Simulation::deleteLater);
+        connect(sim, &Simulation::finished, sim, &Simulation::deleteLater);             // schedule object for deletion
+        connect(sim, &Simulation::progressUpdated, this, &Intellicator::updateProgress);
         connect(sim, &Simulation::priceDataReady, this, &Intellicator::createChart);
     }
 }
@@ -48,9 +53,15 @@ void Intellicator::onButtonClicked()
     ui.buttonExecute->setDisabled(true);
 
     // Retrieve user input and update member variables
-    initialPrice = ui.editInitialPrice->text().toDouble();
-    expectedReturn = ui.editExpectedReturn->text().toDouble();
-    volatility = ui.editVolatility->text().toDouble();
+    QString initialPriceStr = ui.editInitialPrice->text().remove('$');
+    initialPrice = initialPriceStr.toDouble();
+
+    QString expectedReturnStr = ui.editExpectedReturn->text().remove('%');
+    expectedReturn = expectedReturnStr.toDouble() / 100.0;
+    
+    QString editVolatilityStr = ui.editVolatility->text().remove('%');
+    volatility = editVolatilityStr.toDouble() / 100.0;
+    
     timeHorizon = ui.editTimeHorizon->text().toDouble();
     numSimulations = ui.editNumSimulations->text().toInt();
 
