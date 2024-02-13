@@ -23,7 +23,7 @@ signals:
     void priceDataReady(std::vector<Point> value);
 
 public slots:
-    void doWork(Simulator* s);
+    void doWork(std::shared_ptr<Simulator> simulator);
 
 private:
     int numSimulations;

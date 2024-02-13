@@ -1,15 +1,11 @@
 #include "simulation.h"
-#include <QThread>
-#include <QPointF>
-#include <QVector>
-#include <cmath>
 
 Simulation::Simulation(QObject* parent, int numSimulations)
     : QObject(parent), numSimulations(numSimulations) 
 {
 }
 
-void Simulation::doWork(Simulator* simulator)
+void Simulation::doWork(std::shared_ptr<Simulator> simulator)
 {
     std::vector<Point> priceData;
     auto averagePercentage = 0.0;

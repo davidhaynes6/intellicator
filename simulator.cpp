@@ -1,5 +1,4 @@
 #include "simulator.h"
-#include <cmath>
 
 Simulator::Simulator(double initialPrice, double expectedReturn, double volatility, double timeHorizon, int numSimulations) 
     :S0(initialPrice), mu(expectedReturn), sigma(volatility), timeHorizon(timeHorizon), numSimulations(numSimulations)

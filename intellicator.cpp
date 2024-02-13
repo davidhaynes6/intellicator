@@ -6,10 +6,6 @@
 
 Intellicator::Intellicator(QWidget* parent) : QMainWindow(parent), initialPrice(100.0F), expectedReturn(0.1025), volatility(0.2F), timeHorizon(1.0F), numSimulations(10000)
 {
-    sim = nullptr;
-    simulator = nullptr;
-    simThread = nullptr;
-
     ui.setupUi(this);
     ui.editInitialPrice->setText(QString::number(initialPrice));
     ui.editInitialPrice->setInputMask("$999");
@@ -23,6 +19,7 @@ Intellicator::Intellicator(QWidget* parent) : QMainWindow(parent), initialPrice(
     ui.progressBar->setRange(0, 100);
     ui.progressBar->setValue(0);
     connect(ui.buttonExecute, &QPushButton::clicked, this, &Intellicator::onButtonClicked);
+    simThread = nullptr;
 }
 
 Intellicator::~Intellicator()
@@ -30,20 +27,19 @@ Intellicator::~Intellicator()
 }
 
 void Intellicator::initializeThread() {
-
-    if (sim == nullptr && simulator == nullptr && simThread == nullptr) {
-        sim = new Simulation(this, numSimulations);
-        simulator = new Simulator();
+    if (sim.get() == nullptr && simulator.get() == nullptr && simThread == nullptr) {
+        sim = std::make_unique<Simulation>(this, numSimulations);
+        simulator = std::make_unique<Simulator>();
         simThread = new QThread(this);
         sim->moveToThread(simThread);
 
         connect(simThread, &QThread::started, this, &Intellicator::startSimulation);
         connect(simThread, &QThread::finished, simThread, &QThread::deleteLater);       // schedule object for deletion
-        connect(sim, &Simulation::finished, this, &Intellicator::finishedTask);
-        connect(sim, &Simulation::finished, simThread, &QThread::quit);
-        connect(sim, &Simulation::finished, sim, &Simulation::deleteLater);             // schedule object for deletion
-        connect(sim, &Simulation::progressUpdated, this, &Intellicator::updateProgress);
-        connect(sim, &Simulation::priceDataReady, this, &Intellicator::createChart);
+        connect(sim.get(), &Simulation::finished, this, &Intellicator::finishedTask);
+        connect(sim.get(), &Simulation::finished, simThread, &QThread::quit);
+        connect(sim.get(), &Simulation::finished, sim.get(), &Simulation::deleteLater);             // schedule object for deletion
+        connect(sim.get(), &Simulation::progressUpdated, this, &Intellicator::updateProgress);
+        connect(sim.get(), &Simulation::priceDataReady, this, &Intellicator::createChart);
     }
 }
 
@@ -58,10 +54,10 @@ void Intellicator::onButtonClicked()
 
     QString expectedReturnStr = ui.editExpectedReturn->text().remove('%');
     expectedReturn = expectedReturnStr.toDouble() / 100.0;
-    
+
     QString editVolatilityStr = ui.editVolatility->text().remove('%');
     volatility = editVolatilityStr.toDouble() / 100.0;
-    
+
     timeHorizon = ui.editTimeHorizon->text().toDouble();
     numSimulations = ui.editNumSimulations->text().toInt();
 
@@ -78,7 +74,7 @@ void Intellicator::startSimulation()
 {
     // Pass the updated values to the simulation object
     simulator->setParameters(initialPrice, expectedReturn, volatility, timeHorizon, numSimulations);
-    sim->doWork(simulator);
+    sim->doWork(std::move(simulator));
 }
 
 void Intellicator::updateProgress(int value)
@@ -109,21 +105,19 @@ void Intellicator::finishedTask(double value)
 
     ui.editResult->append(result.str().c_str());
 
-    // Clean Up WorkerThread
-    delete sim;
-    sim = nullptr;
-
     // Stop the previous simulation and wait for it to finish
     if (simThread->isRunning()) {
         simThread->quit();
         simThread->wait();
     }
 
+    // Reset Simulation and Simulator
+    sim.reset();
+    simulator.reset();
+
+    // memory managed by Qt
     delete simThread;
     simThread = nullptr;
-
-    delete simulator;
-    simulator = nullptr;
 
     ui.buttonExecute->setDisabled(false);
 }
