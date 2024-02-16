@@ -9,6 +9,8 @@ struct Point
 {
     int simulation;
     float price;
+
+    Point(int simulation, float price) : simulation(simulation), price(price) {}
 };
 
 class Simulation : public QObject {

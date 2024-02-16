@@ -12,8 +12,8 @@ Intellicator::Intellicator(QWidget* parent) : QMainWindow(parent), initialPrice(
     QString expectedReturnStr = QString::number(expectedReturn * 100.0, 'f', 2);
     ui.editExpectedReturn->setText(expectedReturnStr);
     ui.editExpectedReturn->setInputMask("99.99\\%");
-    ui.editVolatility->setText(QString::number(volatility * 100.0));
-    ui.editVolatility->setInputMask("99\\%");
+    ui.editVolatility->setText(QString::number(volatility * 100.0, 'f', 2));
+    ui.editVolatility->setInputMask("99.99\\%");
     ui.editTimeHorizon->setText(QString::number(timeHorizon));
     ui.editNumSimulations->setText(QString::number(numSimulations));
     ui.progressBar->setRange(0, 100);
